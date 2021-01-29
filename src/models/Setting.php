@@ -59,6 +59,10 @@ class Setting extends AbstractCollection
 
     public function getType(): ?string
     {
+        if(empty($this->type)):
+            return null;
+        endif;
+
         return $this->type;
     }
 
