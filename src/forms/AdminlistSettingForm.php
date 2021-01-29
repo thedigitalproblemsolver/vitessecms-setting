@@ -6,23 +6,22 @@ use VitesseCms\Admin\AbstractAdminlistFilterForm;
 use VitesseCms\Core\Interfaces\BaseObjectInterface;
 use VitesseCms\Form\Interfaces\AbstractFormInterface;
 use VitesseCms\Form\Models\Attributes;
-use VitesseCms\Setting\Models\Setting;
+use VitesseCms\Setting\Utils\SettingUtil;
 
 class AdminlistSettingForm extends AbstractAdminlistFilterForm
 {
-    public static function getAdminlistForm(
-        AbstractFormInterface $form,
-        BaseObjectInterface $item
-    ): void {
+    public static function getAdminlistForm(AbstractFormInterface $form, BaseObjectInterface $item): void {
         self::addNameField($form);
+
         $form->addText(
             '%ADMIN_VALUE%',
             'filter[value.'.$form->configuration->getLanguageShort().']'
         )->addDropdown(
             '%ADMIN_TYPE%',
             'filter[type]',
-            (new Attributes())->setOptions((new Setting())->getTypes())
+            (new Attributes())->setOptions(SettingUtil::getTypes($form->configuration))
         );
+
         self::addPublishedField($form);
     }
 }

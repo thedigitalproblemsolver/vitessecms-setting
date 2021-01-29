@@ -5,8 +5,9 @@ namespace VitesseCms\Setting\Controllers;
 use VitesseCms\Admin\AbstractAdminController;
 use VitesseCms\Setting\Forms\SettingForm;
 use VitesseCms\Setting\Models\Setting;
+use VitesseCms\Setting\Repositories\AdminRepositoriesInterface;
 
-class AdminsettingController extends AbstractAdminController
+class AdminsettingController extends AbstractAdminController implements AdminRepositoriesInterface
 {
     public function onConstruct()
     {

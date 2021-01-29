@@ -2,11 +2,13 @@
 
 namespace VitesseCms\Setting\Services;
 
+use VitesseCms\Database\Models\FindValue;
+use VitesseCms\Database\Models\FindValueIterator;
 use VitesseCms\Setting\Models\Setting;
 use VitesseCms\Core\Services\CacheService;
 use VitesseCms\Configuration\Services\ConfigService;
-use VitesseCms\Language\Models\Language;
 use VitesseCms\Setting\Factory\SettingFactory;
+use VitesseCms\Setting\Repositories\SettingRepository;
 
 class SettingService
 {
@@ -20,42 +22,42 @@ class SettingService
      */
     protected $configuration;
 
+    protected $settingRepository;
+
     public function __construct(
         CacheService $cache,
-        ConfigService $configuration
+        ConfigService $configuration,
+        SettingRepository $settingRepository
     ) {
         $this->cache = $cache;
         $this->configuration = $configuration;
+        $this->settingRepository = $settingRepository;
     }
 
     public function get(string $settingKey)
     {
-        if (Language::count() === 0) :
-            return '';
-        endif;
-
         $settingKey = $this->buildCallingName($settingKey);
         $cacheKey = $this->cache->getCacheKey($settingKey.$this->configuration->getLanguageShort());
         $content = $this->cache->get($cacheKey);
         if (!$content) :
-            Setting::setFindValue('calling_name', $settingKey);
-            /** @var Setting $setting */
-            $setting = Setting::findFirst();
-            if (!$setting) :
-                Setting::setFindValue('calling_name', $settingKey);
-                Setting::setFindPublished(false);
-                $setting = Setting::findFirst();
-                if (!$setting) :
-                    $setting = SettingFactory::create($settingKey, '');
-                    $setting->save();
+            $setting = $this->settingRepository->findFirst(
+                new FindValueIterator([new FindValue('calling_name',$settingKey)])
+            );
+            if ($setting === null) :
+                $setting = $this->settingRepository->findFirst(
+                    new FindValueIterator([new FindValue('calling_name',$settingKey)]),
+                    false
+                );
+                if ($setting === null) :
+                    SettingFactory::create($settingKey, '')->save();
 
                     return '';
                 else :
-                    $content = $setting->_('value');
+                    $content = $setting->getValueField();
                     $this->cache->save($cacheKey, $content);
                 endif;
             else :
-                $content = $setting->_('value');
+                $content = $setting->getValueField();
                 $this->cache->save($cacheKey, $content);
             endif;
         endif;
@@ -66,28 +68,19 @@ class SettingService
     public function has(string $setting): bool
     {
         $setting = $this->buildCallingName($setting);
-
-        $content = $this->cache->get(
-            $this->cache->getCacheKey($setting)
-        );
-        if (!$content) :
-            Setting::setFindValue('calling_name', $setting);
-            $content = Setting::count();
+        $content = $this->cache->get($this->cache->getCacheKey($setting));
+        if ($content !== null) :
+            return true;
         endif;
 
-        return (bool)$content;
-    }
+        $setting = $this->settingRepository->findFirst(
+            new FindValueIterator([new FindValue('calling_name',$setting)])
+        );
+        if ($setting !== null) :
+            return true;
+        endif;
 
-    /**
-     * @param string $setting
-     *
-     * @return mixed|null|string
-     *
-     * @deprecated please use ->get
-     */
-    public function _(string $setting)
-    {
-        return $this->get($setting);
+        return false;
     }
 
     public function parsePlaceholders(string $content): string

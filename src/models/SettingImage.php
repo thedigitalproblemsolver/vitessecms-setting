@@ -2,20 +2,13 @@
 
 namespace VitesseCms\Setting\Models;
 
-use VitesseCms\Setting\AbstractSetting;
+use VitesseCms\Form\Models\Attributes;
+use VitesseCms\Setting\SettingInterface;
 use VitesseCms\Setting\Forms\SettingForm;
 
-class SettingImage extends AbstractSetting
+class SettingImage implements SettingInterface
 {
     public function buildAdminForm(SettingForm $form, Setting $item) {
-        $this->setBaseOptions();
-        $this->setOption('template', 'filemanager');
-
-        $form->_(
-            'file',
-            '%CORE_VALUE%',
-            'value',
-            $this->getOptions()
-        );
+        $form->addFilemanager('%CORE_VALUE%','value', (new Attributes())->setRequired()->setMultilang());
     }
 }

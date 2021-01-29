@@ -3,29 +3,20 @@
 namespace VitesseCms\Setting\Models;
 
 use VitesseCms\Block\Models\Block;
-use VitesseCms\Setting\AbstractSetting;
+use VitesseCms\Form\Helpers\ElementHelper;
+use VitesseCms\Form\Models\Attributes;
+use VitesseCms\Setting\SettingInterface;
 use VitesseCms\Setting\Forms\SettingForm;
 
-/**
- * Class SettingBlock
- */
-class SettingBlock extends AbstractSetting
+class SettingBlock implements SettingInterface
 {
-
-    /**
-     * {@inheritdoc}
-     */
     public function buildAdminForm(SettingForm $form, Setting $item)
     {
-        $this->setBaseOptions();
-        $this->setOption('options', Block::class);
-        $this->setOption('multilang', false);
-
-        $form->_(
-            'select',
-            '%ADMIN_VALUE%',
-            'value',
-            $this->getOptions()
+        $form->addDropdown('%ADMIN_VALUE%', 'value', (new Attributes())
+            ->setRequired()
+            ->setOptions(ElementHelper::modelIteratorToOptions(
+                $form->repositories->block->findAll(null, false)
+            ))
         );
     }
 }

@@ -1,27 +1,14 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace VitesseCms\Setting\Models;
 
-use VitesseCms\Setting\AbstractSetting;
+use VitesseCms\Form\Models\Attributes;
+use VitesseCms\Setting\SettingInterface;
 use VitesseCms\Setting\Forms\SettingForm;
 
-/**
- * Class SettingText
- */
-class SettingText extends AbstractSetting
+class SettingText implements SettingInterface
 {
-
-    /**
-     * {@inheritdoc}
-     */
     public function buildAdminForm(SettingForm $form, Setting $item) {
-        $this->setBaseOptions();
-
-        $form->_(
-            'text',
-            '%ADMIN_VALUE%',
-            'value',
-            $this->getOptions()
-        );
+        $form->addText('%ADMIN_VALUE%', 'value', (new Attributes())->setRequired()->setMultilang());
     }
 }

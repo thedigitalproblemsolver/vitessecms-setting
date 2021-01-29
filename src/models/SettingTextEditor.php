@@ -1,27 +1,14 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace VitesseCms\Setting\Models;
 
-use VitesseCms\Setting\AbstractSetting;
+use VitesseCms\Form\Models\Attributes;
+use VitesseCms\Setting\SettingInterface;
 use VitesseCms\Setting\Forms\SettingForm;
 
-/**
- * Class SettingTextEditor
- */
-class SettingTextEditor extends AbstractSetting
+class SettingTextEditor implements SettingInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function buildAdminForm(SettingForm $form, Setting $item) {
-        $this->setBaseOptions();
-        $this->setOption('inputClass', 'editor');
-
-        $form->_(
-            'textarea',
-            '%CORE_VALUE%',
-            'value',
-            $this->getOptions()
-        );
+        $form->addEditor('%CORE_VALUE%', 'value', (new Attributes())->setRequired()->setMultilang());
     }
 }

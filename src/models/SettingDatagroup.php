@@ -1,31 +1,22 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace VitesseCms\Setting\Models;
 
 use VitesseCms\Core\Models\Datagroup;
-use VitesseCms\Setting\AbstractSetting;
+use VitesseCms\Form\Helpers\ElementHelper;
+use VitesseCms\Form\Models\Attributes;
+use VitesseCms\Setting\SettingInterface;
 use VitesseCms\Setting\Forms\SettingForm;
 
-/**
- * Class SettingDatagroup
- */
-class SettingDatagroup extends AbstractSetting
+class SettingDatagroup implements SettingInterface
 {
-
-    /**
-     * @inheritdoc
-     */
     public function buildAdminForm(SettingForm $form, Setting $item)
     {
-        $this->setBaseOptions();
-        $this->setOption('options', Datagroup::class);
-        $this->setOption('multilang', false);
-
-        $form->_(
-            'select',
-            '%ADMIN_VALUE%',
-            'value',
-            $this->getOptions()
+        $form->addDropdown('%ADMIN_VALUE%', 'value', (new Attributes())
+            ->setRequired()
+            ->setOptions(ElementHelper::modelIteratorToOptions(
+                $form->repositories->datagroup->findAll(null,false)
+            ))
         );
     }
 }

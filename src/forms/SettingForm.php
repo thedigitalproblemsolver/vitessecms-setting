@@ -1,70 +1,64 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace VitesseCms\Setting\Forms;
 
 use VitesseCms\Form\AbstractForm;
+use VitesseCms\Form\AbstractFormWithRepository;
 use VitesseCms\Form\Helpers\ElementHelper;
+use VitesseCms\Form\Interfaces\FormWithRepositoryInterface;
 use VitesseCms\Form\Models\Attributes;
 use VitesseCms\Setting\Enum\TypeEnum;
 use VitesseCms\Setting\Models\Setting;
-use VitesseCms\Setting\AbstractSetting;
+use VitesseCms\Setting\SettingInterface;
+use VitesseCms\Setting\Repositories\AdminRepositoryInterface;
 
-/**
- * Class SettingForm
- */
-class SettingForm extends AbstractForm
+class SettingForm extends AbstractFormWithRepository
 {
+    /**
+     * @var Setting
+     */
+    protected $_entity;
 
     /**
-     * @param Setting|null $item
+     * @var AdminRepositoryInterface
      */
-    public function initialize( Setting $item = null)
+    public $repositories;
+
+    public function buildForm(): FormWithRepositoryInterface
     {
-        if( $item === null) :
-            $item = new Setting();
-            $item ->set('type', null);
+        if( $this->_entity === null) :
+            $this->_entity = new Setting();
         endif;
 
-        $this->_(
-            'text',
-            '%CORE_NAME%',
-            'name',
-            [
-                'required' => 'required',
-                'multilang' => true,
-            ]
-        );
+        $this->addText('%CORE_NAME%', 'name', (new Attributes())->setRequired()->setMultilang());
 
-        $readonly = null;
-        if( $item->_('calling_name') ) :
-            $readonly = 'readonly';
+        $readonly = false;
+        if( $this->_entity->getCallingName() !== null ) :
+            $readonly = true;
         endif;
-        $this->_(
-            'text',
+
+        $this->addText(
             '%ADMIN_CALLING_NAME%',
             'calling_name',
-            [
-                'required' => 'required',
-                'readonly' => $readonly
-            ]
+            (new Attributes())->setRequired()->setReadonly($readonly)
         );
 
-        if( !$item->_('type') ) :
+        if( $this->_entity->getType() === null ) :
             $this->addDropdown(
                 '%ADMIN_TYPE%',
                 'type',
-                (new Attributes())->setRequired(true)->setOptions(ElementHelper::arrayToSelectOptions(TypeEnum::ALL_TYPES))
+                (new Attributes())->setRequired(true)
+                    ->setOptions(ElementHelper::arrayToSelectOptions(TypeEnum::ALL_TYPES))
             );
         else :
-            $object = '\\Modules\\Setting\Models\\Setting'.str_replace('Setting','', ucfirst($item->_('type')));
-            /** @var AbstractSetting $item */
+            $object = $this->_entity->getTypeClass();
+            /** @var SettingInterface $object */
             $object = new $object();
-            $object->buildAdminForm($this, $item);
+            $object->buildAdminForm($this, $this->_entity);
         endif;
 
-        $this->_(
-            'submit',
-            '%CORE_SAVE%'
-        );
+        $this->addSubmitButton('%CORE_SAVE%');
+
+        return $this;
     }
 }

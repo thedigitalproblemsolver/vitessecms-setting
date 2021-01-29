@@ -1,24 +1,11 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace VitesseCms\Setting\Factory;
 
 use VitesseCms\Setting\Models\Setting;
 
-/**
- * Class SettingFactory
- */
 class SettingFactory
 {
-
-    /**
-     * @param string $calling_name
-     * @param string $type
-     * @param string $value
-     * @param string $name
-     * @param bool $published
-     *
-     * @return Setting
-     */
     public static function create(
         string $calling_name,
         string $type,
@@ -32,9 +19,9 @@ class SettingFactory
 
         $setting = new Setting();
         $setting->set('name', $name, true);
-        $setting->set('calling_name', $calling_name);
-        $setting->set('published', $published);
-        $setting->set('type', $type);
+        $setting->setCallingName($calling_name);
+        $setting->setPublished($published);
+        $setting->setType($type);
         $setting->set('value', $value, true);
 
         return $setting;

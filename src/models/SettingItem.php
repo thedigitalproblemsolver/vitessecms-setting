@@ -1,45 +1,33 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace VitesseCms\Setting\Models;
 
 use VitesseCms\Content\Models\Item;
 use VitesseCms\Core\Helpers\ItemHelper;
-use VitesseCms\Setting\AbstractSetting;
+use VitesseCms\Form\Helpers\ElementHelper;
+use VitesseCms\Form\Models\Attributes;
+use VitesseCms\Setting\SettingInterface;
 use VitesseCms\Setting\Forms\SettingForm;
 
-/**
- * Class SettingImage
- */
-class SettingItem extends AbstractSetting
+class SettingItem implements SettingInterface
 {
-
-    /**
-     * {@inheritdoc}
-     */
     public function buildAdminForm(SettingForm $form, Setting $item) {
-        $this->setBaseOptions();
-        $this->setOption('multilang', false);
-        $this->setOption('inputClass', 'select2-ajax');
-        $this->setOption('data-url', '/content/index/search/');
-
-        if($item->_('value')) :
-            $selectedItem = Item::findById($item->_('value'));
-            if($selectedItem) :
+        $options = [];
+        if($item->getValueField() !== null) :
+            $selectedItem = $form->repositories->item->getById($item->getValueField());
+            if($selectedItem !== null) :
                 $itemPath = ItemHelper::getPathFromRoot($selectedItem);
-                $options[] = [
-                    'value'    => (string)$selectedItem->getId(),
-                    'label'    => implode(' - ', $itemPath),
-                    'selected' => true,
-                ];
-                $this->setOption('options', $options);
+                $options[(string)$selectedItem->getId()] = implode(' - ', $itemPath);
             endif;
         endif;
 
-        $form->_(
-            'select',
+        $form->addDropdown(
             '%ADMIN_VALUE%',
             'value',
-            $this->getOptions()
+            (new Attributes())
+                ->setInputClass('select2-ajax')
+                ->setDataUrl('/content/index/search/')
+                ->setOptions(ElementHelper::arrayToSelectOptions($options))
         );
     }
 }
