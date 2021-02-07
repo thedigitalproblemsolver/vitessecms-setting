@@ -7,7 +7,7 @@ use VitesseCms\Block\Repositories\BlockRepository;
 use VitesseCms\Content\Repositories\ItemRepository;
 use VitesseCms\Core\AbstractModule;
 use Phalcon\DiInterface;
-use VitesseCms\Core\Repositories\DatagroupRepository;
+use VitesseCms\Datagroup\Repositories\DatagroupRepository;
 use VitesseCms\Setting\Repositories\AdminRepositoryCollection;
 
 class Module extends AbstractModule

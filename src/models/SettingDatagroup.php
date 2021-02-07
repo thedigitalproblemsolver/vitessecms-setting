@@ -2,7 +2,7 @@
 
 namespace VitesseCms\Setting\Models;
 
-use VitesseCms\Core\Models\Datagroup;
+use VitesseCms\Datagroup\Models\Datagroup;
 use VitesseCms\Form\Helpers\ElementHelper;
 use VitesseCms\Form\Models\Attributes;
 use VitesseCms\Setting\SettingInterface;
