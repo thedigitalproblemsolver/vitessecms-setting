@@ -17,9 +17,6 @@ class AdminMenuListener
                 ->addChild('Languages', 'admin/language/adminlanguage/adminList')
                 ->addChild('Site Creator', 'admin/install/sitecreator/index')
                 ->addChild('Search', 'admin/search/adminindex/index')
-                ->addChild('Activity log', 'admin/core/adminlog/adminList')
-                ->addChild('Job-queue', 'admin/core/adminjobqueue/adminList')
-                ->addChild('Execute job', 'core/JobQueue/execute','_blank')
                 ->addChild('Export', 'admin/export/adminindex/index')
                 ->addChild('SEF-redirects', 'admin/sef/adminredirect/adminList')
             ;
