@@ -14,11 +14,9 @@ class AdminMenuListener
             $children = new AdminMenuNavBarChildren();
 
             $children->addChild('Settings', 'admin/setting/adminsetting/adminList')
-                ->addChild('Languages', 'admin/language/adminlanguage/adminList')
                 ->addChild('Site Creator', 'admin/install/sitecreator/index')
                 ->addChild('Search', 'admin/search/adminindex/index')
                 ->addChild('Export', 'admin/export/adminindex/index')
-                ->addChild('SEF-redirects', 'admin/sef/adminredirect/adminList')
             ;
 
             $adminMenu->addDropdown('System',$children);
