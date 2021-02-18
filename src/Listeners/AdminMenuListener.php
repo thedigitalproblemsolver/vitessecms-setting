@@ -12,12 +12,7 @@ class AdminMenuListener
     {
         if ($adminMenu->getUser()->getPermissionRole() === 'superadmin') :
             $children = new AdminMenuNavBarChildren();
-
-            $children->addChild('Settings', 'admin/setting/adminsetting/adminList')
-                ->addChild('Site Creator', 'admin/install/sitecreator/index')
-                ->addChild('Search', 'admin/search/adminindex/index')
-                ->addChild('Export', 'admin/export/adminindex/index')
-            ;
+            $children->addChild('Settings', 'admin/setting/adminsetting/adminList');
 
             $adminMenu->addDropdown('System',$children);
         endif;
