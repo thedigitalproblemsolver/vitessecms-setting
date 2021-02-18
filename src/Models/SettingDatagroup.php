@@ -15,7 +15,7 @@ class SettingDatagroup implements SettingInterface
         $form->addDropdown('%ADMIN_VALUE%', 'value', (new Attributes())
             ->setRequired()
             ->setOptions(ElementHelper::modelIteratorToOptions(
-                $form->repositories->datagroup->findAll(null,false)
+                $form->repositories->datagroup->findAll(null, false)
             ))
         );
     }

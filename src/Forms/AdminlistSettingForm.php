@@ -10,12 +10,13 @@ use VitesseCms\Setting\Utils\SettingUtil;
 
 class AdminlistSettingForm extends AbstractAdminlistFilterForm
 {
-    public static function getAdminlistForm(AbstractFormInterface $form, BaseObjectInterface $item): void {
+    public static function getAdminlistForm(AbstractFormInterface $form, BaseObjectInterface $item): void
+    {
         self::addNameField($form);
 
         $form->addText(
             '%ADMIN_VALUE%',
-            'filter[value.'.$form->configuration->getLanguageShort().']'
+            'filter[value.' . $form->configuration->getLanguageShort() . ']'
         )->addDropdown(
             '%ADMIN_TYPE%',
             'filter[type]',

@@ -15,25 +15,24 @@ use VitesseCms\Setting\Repositories\AdminRepositoryInterface;
 class SettingForm extends AbstractFormWithRepository
 {
     /**
+     * @var AdminRepositoryInterface
+     */
+    public $repositories;
+    /**
      * @var Setting
      */
     protected $_entity;
 
-    /**
-     * @var AdminRepositoryInterface
-     */
-    public $repositories;
-
     public function buildForm(): FormWithRepositoryInterface
     {
-        if( $this->_entity === null) :
+        if ($this->_entity === null) :
             $this->_entity = new Setting();
         endif;
 
         $this->addText('%CORE_NAME%', 'name', (new Attributes())->setRequired()->setMultilang());
 
         $readonly = false;
-        if( $this->_entity->getCallingName() !== null ) :
+        if ($this->_entity->getCallingName() !== null) :
             $readonly = true;
         endif;
 
@@ -43,7 +42,7 @@ class SettingForm extends AbstractFormWithRepository
             (new Attributes())->setRequired()->setReadonly($readonly)
         );
 
-        if( $this->_entity->getType() === null ) :
+        if ($this->_entity->getType() === null) :
             $this->addDropdown(
                 '%ADMIN_TYPE%',
                 'type',

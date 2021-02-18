@@ -12,9 +12,10 @@ class SettingFactory
         string $value = '',
         string $name = '',
         bool $published = false
-    ): Setting {
-        if(empty($name)) :
-            $name = ucwords(str_replace('_',' - ',$calling_name));
+    ): Setting
+    {
+        if (empty($name)) :
+            $name = ucwords(str_replace('_', ' - ', $calling_name));
         endif;
 
         $setting = new Setting();

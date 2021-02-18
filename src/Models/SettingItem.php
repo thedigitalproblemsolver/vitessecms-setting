@@ -11,11 +11,12 @@ use VitesseCms\Setting\Forms\SettingForm;
 
 class SettingItem implements SettingInterface
 {
-    public function buildAdminForm(SettingForm $form, Setting $item) {
+    public function buildAdminForm(SettingForm $form, Setting $item)
+    {
         $options = [];
-        if($item->getValueField() !== null) :
+        if ($item->getValueField() !== null) :
             $selectedItem = $form->repositories->item->getById($item->getValueField());
-            if($selectedItem !== null) :
+            if ($selectedItem !== null) :
                 $itemPath = ItemHelper::getPathFromRoot($selectedItem);
                 $options[(string)$selectedItem->getId()] = implode(' - ', $itemPath);
             endif;

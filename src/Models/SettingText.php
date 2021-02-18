@@ -8,7 +8,8 @@ use VitesseCms\Setting\Forms\SettingForm;
 
 class SettingText implements SettingInterface
 {
-    public function buildAdminForm(SettingForm $form, Setting $item) {
+    public function buildAdminForm(SettingForm $form, Setting $item)
+    {
         $form->addText('%ADMIN_VALUE%', 'value', (new Attributes())->setRequired()->setMultilang());
     }
 }

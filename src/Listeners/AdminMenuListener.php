@@ -14,7 +14,7 @@ class AdminMenuListener
             $children = new AdminMenuNavBarChildren();
             $children->addChild('Settings', 'admin/setting/adminsetting/adminList');
 
-            $adminMenu->addDropdown('System',$children);
+            $adminMenu->addDropdown('System', $children);
         endif;
     }
 }
