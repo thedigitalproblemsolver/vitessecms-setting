@@ -14,11 +14,11 @@ class TypeEnum extends AbstractEnum
     public const TEXT_EDITOR = 'SettingTextEditor';
 
     public const ALL_TYPES = [
-        self::BLOCK       => 'Block',
-        self::DATAGROUP   => 'Datagroup',
-        self::IMAGE       => 'Image',
-        self::ITEM        => 'Item',
-        self::TEXT        => 'Text',
+        self::BLOCK => 'Block',
+        self::DATAGROUP => 'Datagroup',
+        self::IMAGE => 'Image',
+        self::ITEM => 'Item',
+        self::TEXT => 'Text',
         self::TEXT_EDITOR => 'Text editor',
     ];
 }

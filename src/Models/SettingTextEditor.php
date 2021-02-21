@@ -8,7 +8,8 @@ use VitesseCms\Setting\Forms\SettingForm;
 
 class SettingTextEditor implements SettingInterface
 {
-    public function buildAdminForm(SettingForm $form, Setting $item) {
+    public function buildAdminForm(SettingForm $form, Setting $item)
+    {
         $form->addEditor('%CORE_VALUE%', 'value', (new Attributes())->setRequired()->setMultilang());
     }
 }

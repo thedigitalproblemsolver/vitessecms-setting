@@ -29,7 +29,8 @@ class AdminRepositoryCollection implements BaseRepositoriesInterface
         BlockRepository $blockRepository,
         DatagroupRepository $datagroupRepository,
         ItemRepository $itemRepository
-    ) {
+    )
+    {
         $this->block = $blockRepository;
         $this->datagroup = $datagroupRepository;
         $this->item = $itemRepository;

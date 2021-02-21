@@ -28,26 +28,18 @@ class Setting extends AbstractCollection
         $this->value = [];
     }
 
-    public function getValues(): array
-    {
-        return (array)$this->value??[];
-    }
-
     public function getValueField(): ?string
     {
         return $this->_('value');
     }
 
-    public function getCallingName(): ?string
+    public function getType(): ?string
     {
-        return $this->calling_name;
-    }
+        if (empty($this->type)):
+            return null;
+        endif;
 
-    public function setCallingName(string $calling_name): Setting
-    {
-        $this->calling_name = $calling_name;
-
-        return $this;
+        return $this->type;
     }
 
     public function setType(string $type): Setting
@@ -57,29 +49,38 @@ class Setting extends AbstractCollection
         return $this;
     }
 
-    public function getType(): ?string
-    {
-        if(empty($this->type)):
-            return null;
-        endif;
-
-        return $this->type;
-    }
-
     public function getTypeClass(): string
     {
-        return '\\VitesseCms\\Setting\\Models\\Setting'.str_replace('Setting','', ucfirst($this->type));
+        return '\\VitesseCms\\Setting\\Models\\Setting' . str_replace('Setting', '', ucfirst($this->type));
     }
 
-    //TODO move to listener
     public function afterSave()
     {
         /** @var CacheService $cache */
         $cache = Di::getDefault()->get('cache');
         foreach ($this->getValues() as $languageShort => $value):
             $cache->delete(
-                $cache->getCacheKey($this->getCallingName().$languageShort)
+                $cache->getCacheKey($this->getCallingName() . $languageShort)
             );
         endforeach;
+    }
+
+    public function getValues(): array
+    {
+        return (array)$this->value ?? [];
+    }
+
+    public function getCallingName(): ?string
+    {
+        return $this->calling_name;
+    }
+
+    //TODO move to listener
+
+    public function setCallingName(string $calling_name): Setting
+    {
+        $this->calling_name = $calling_name;
+
+        return $this;
     }
 }

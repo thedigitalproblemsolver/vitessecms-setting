@@ -28,24 +28,64 @@ class SettingService
         CacheService $cache,
         ConfigService $configuration,
         SettingRepository $settingRepository
-    ) {
+    )
+    {
         $this->cache = $cache;
         $this->configuration = $configuration;
         $this->settingRepository = $settingRepository;
     }
 
+    public function has(string $setting): bool
+    {
+        $setting = $this->buildCallingName($setting);
+        $content = $this->cache->get($this->cache->getCacheKey($setting));
+        if ($content !== null) :
+            return true;
+        endif;
+
+        $setting = $this->settingRepository->findFirst(
+            new FindValueIterator([new FindValue('calling_name', $setting)])
+        );
+        if ($setting !== null) :
+            return true;
+        endif;
+
+        return false;
+    }
+
+    protected function buildCallingName(string $setting): string
+    {
+        return strtoupper(str_replace([' ', '-'], '_', $setting));
+    }
+
+    public function parsePlaceholders(string $content): string
+    {
+        preg_match_all('/{{([A-Z_-]*)}}/', $content, $aMatches);
+        foreach ((array)$aMatches[1] as $key => $value) :
+            if (substr_count($value, '_') === 2) :
+                $content = str_replace(
+                    ['{{{' . $value . '}}}', '{{' . $value . '}}'],
+                    $this->get($value),
+                    $content
+                );
+            endif;
+        endforeach;
+
+        return $content;
+    }
+
     public function get(string $settingKey)
     {
         $settingKey = $this->buildCallingName($settingKey);
-        $cacheKey = $this->cache->getCacheKey($settingKey.$this->configuration->getLanguageShort());
+        $cacheKey = $this->cache->getCacheKey($settingKey . $this->configuration->getLanguageShort());
         $content = $this->cache->get($cacheKey);
         if (!$content) :
             $setting = $this->settingRepository->findFirst(
-                new FindValueIterator([new FindValue('calling_name',$settingKey)])
+                new FindValueIterator([new FindValue('calling_name', $settingKey)])
             );
             if ($setting === null) :
                 $setting = $this->settingRepository->findFirst(
-                    new FindValueIterator([new FindValue('calling_name',$settingKey)]),
+                    new FindValueIterator([new FindValue('calling_name', $settingKey)]),
                     false
                 );
                 if ($setting === null) :
@@ -63,44 +103,5 @@ class SettingService
         endif;
 
         return $content;
-    }
-
-    public function has(string $setting): bool
-    {
-        $setting = $this->buildCallingName($setting);
-        $content = $this->cache->get($this->cache->getCacheKey($setting));
-        if ($content !== null) :
-            return true;
-        endif;
-
-        $setting = $this->settingRepository->findFirst(
-            new FindValueIterator([new FindValue('calling_name',$setting)])
-        );
-        if ($setting !== null) :
-            return true;
-        endif;
-
-        return false;
-    }
-
-    public function parsePlaceholders(string $content): string
-    {
-        preg_match_all('/{{([A-Z_-]*)}}/', $content, $aMatches);
-        foreach ((array)$aMatches[1] as $key => $value) :
-            if (substr_count($value, '_') === 2) :
-                $content = str_replace(
-                    ['{{{'.$value.'}}}', '{{'.$value.'}}'],
-                    $this->get($value),
-                    $content
-                );
-            endif;
-        endforeach;
-
-        return $content;
-    }
-
-    protected function buildCallingName(string $setting): string
-    {
-        return strtoupper(str_replace([' ', '-'], '_', $setting));
     }
 }

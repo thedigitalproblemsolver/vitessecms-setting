@@ -16,10 +16,10 @@ class SettingUtil
             'selected' => false
         ]];
 
-        $files = DirectoryUtil::getFilelist($configService->getVendorNameDir() . 'setting/src/models/');
+        $files = DirectoryUtil::getFilelist($configService->getVendorNameDir() . 'setting/src/Models/');
         foreach ($files as $path => $file) :
-            $name = ucfirst(str_replace('Setting','', FileUtil::getName($file)));
-            if($file !== 'Setting.php') :
+            $name = ucfirst(str_replace('Setting', '', FileUtil::getName($file)));
+            if ($file !== 'Setting.php') :
                 $types[] = [
                     'value' => FileUtil::getName($file),
                     'label' => strtolower($name),

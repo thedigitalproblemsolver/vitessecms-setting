@@ -5,11 +5,13 @@ namespace VitesseCms\Setting\Repositories;
 use VitesseCms\Database\Models\FindValueIterator;
 use VitesseCms\Setting\Models\Setting;
 
-class SettingRepository {
+class SettingRepository
+{
     public function findFirst(
         ?FindValueIterator $findValues = null,
         bool $hideUnpublished = true
-    ): ?Setting {
+    ): ?Setting
+    {
         Setting::setFindPublished($hideUnpublished);
         $this->parsefindValues($findValues);
 
