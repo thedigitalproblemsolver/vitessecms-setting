@@ -35,7 +35,7 @@ class SettingService
         $this->settingRepository = $settingRepository;
     }
 
-    public function has(string $setting): bool
+    public function has(string $setting, $hideUnpublished = true): bool
     {
         $setting = $this->buildCallingName($setting);
         $content = $this->cache->get($this->cache->getCacheKey($setting));
@@ -44,7 +44,8 @@ class SettingService
         endif;
 
         $setting = $this->settingRepository->findFirst(
-            new FindValueIterator([new FindValue('calling_name', $setting)])
+            new FindValueIterator([new FindValue('calling_name', $setting)]),
+            $hideUnpublished
         );
         if ($setting !== null) :
             return true;
