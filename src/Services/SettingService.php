@@ -90,7 +90,7 @@ class SettingService
                     false
                 );
                 if ($setting === null) :
-                    SettingFactory::create($settingKey, null)->save();
+                    SettingFactory::create($settingKey)->save();
 
                     return '';
                 else :

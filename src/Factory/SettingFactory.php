@@ -8,7 +8,7 @@ class SettingFactory
 {
     public static function create(
         string $calling_name,
-        string $type,
+        string $type = null,
         string $value = '',
         string $name = '',
         bool $published = false
