@@ -30,7 +30,11 @@ class Setting extends AbstractCollection
 
     public function getValueField(): ?string
     {
-        return $this->_('value');
+        if(is_string($this->_('value'))):
+            return $this->_('value');
+        endif;
+
+        return '';
     }
 
     public function getType(): ?string
@@ -42,7 +46,7 @@ class Setting extends AbstractCollection
         return $this->type;
     }
 
-    public function setType(string $type): Setting
+    public function setType(?string $type): Setting
     {
         $this->type = $type;
 
