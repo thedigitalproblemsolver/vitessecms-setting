@@ -19,7 +19,7 @@
   },
   "require": {
     "vitessecms/admin": "~0.0.26",
-    "vitessecms/block": "~0.0.20",
+    "vitessecms/block": "~0.0.21",
     "vitessecms/content": "~0.0.16",
     "vitessecms/core": "~0.0.8",
     "vitessecms/form": "~0.0.10",
