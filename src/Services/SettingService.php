@@ -105,4 +105,14 @@ class SettingService
 
         return $content;
     }
+
+    public function getString(string $settingKey): string
+    {
+        return (string)$this->get($settingKey);
+    }
+
+    public function getBool(string $settingKey): bool
+    {
+        return (bool)$this->get($settingKey);
+    }
 }
