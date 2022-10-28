@@ -21,8 +21,8 @@
     "vitessecms/admin": "~0.2.9",
     "vitessecms/block": "~0.2.20",
     "vitessecms/content": "~0.2.21",
-    "vitessecms/core": "~0.2.22",
-    "vitessecms/form": "~0.2.9",
+    "vitessecms/core": "~0.2.23",
+    "vitessecms/form": "~0.2.10",
     "vitessecms/datagroup": "~0.2.11",
     "vitessecms/language": "~0.2.4",
     "vitessecms/configuration": "~0.2.2"

@@ -7,6 +7,7 @@ use VitesseCms\Core\AbstractEnum;
 class TypeEnum extends AbstractEnum
 {
     public const BLOCK = 'SettingBlock';
+    public const COLOR = 'SettingColor';
     public const DATAGROUP = 'SettingDatagroup';
     public const IMAGE = 'SettingImage';
     public const ITEM = 'SettingItem';
@@ -15,6 +16,7 @@ class TypeEnum extends AbstractEnum
 
     public const ALL_TYPES = [
         self::BLOCK => 'Block',
+        self::COLOR => 'Color',
         self::DATAGROUP => 'Datagroup',
         self::IMAGE => 'Image',
         self::ITEM => 'Item',
