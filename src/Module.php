@@ -6,7 +6,7 @@ use VitesseCms\Admin\Utils\AdminUtil;
 use VitesseCms\Block\Repositories\BlockRepository;
 use VitesseCms\Content\Repositories\ItemRepository;
 use VitesseCms\Core\AbstractModule;
-use Phalcon\DiInterface;
+use Phalcon\Di\DiInterface;
 use VitesseCms\Datagroup\Repositories\DatagroupRepository;
 use VitesseCms\Setting\Repositories\AdminRepositoryCollection;
 
