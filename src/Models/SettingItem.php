@@ -2,12 +2,11 @@
 
 namespace VitesseCms\Setting\Models;
 
-use VitesseCms\Content\Models\Item;
 use VitesseCms\Core\Helpers\ItemHelper;
 use VitesseCms\Form\Helpers\ElementHelper;
 use VitesseCms\Form\Models\Attributes;
-use VitesseCms\Setting\SettingInterface;
 use VitesseCms\Setting\Forms\SettingForm;
+use VitesseCms\Setting\SettingInterface;
 
 class SettingItem implements SettingInterface
 {
