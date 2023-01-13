@@ -4,9 +4,8 @@ namespace VitesseCms\Setting\Repositories;
 
 use VitesseCms\Block\Repositories\BlockRepository;
 use VitesseCms\Content\Repositories\ItemRepository;
-use VitesseCms\Datagroup\Repositories\DatagroupRepository;
 use VitesseCms\Database\Interfaces\BaseRepositoriesInterface;
-use VitesseCms\Language\Repositories\LanguageRepository;
+use VitesseCms\Datagroup\Repositories\DatagroupRepository;
 
 class AdminRepositoryCollection implements BaseRepositoriesInterface
 {
@@ -26,9 +25,9 @@ class AdminRepositoryCollection implements BaseRepositoriesInterface
     public $item;
 
     public function __construct(
-        BlockRepository $blockRepository,
+        BlockRepository     $blockRepository,
         DatagroupRepository $datagroupRepository,
-        ItemRepository $itemRepository
+        ItemRepository      $itemRepository
     )
     {
         $this->block = $blockRepository;
