@@ -4,7 +4,7 @@ namespace VitesseCms\Setting\Models;
 
 use VitesseCms\Database\AbstractCollection;
 use VitesseCms\Core\Services\CacheService;
-use Phalcon\Di;
+use Phalcon\Di\Di;
 
 class Setting extends AbstractCollection
 {
@@ -30,7 +30,7 @@ class Setting extends AbstractCollection
 
     public function getValueField(): ?string
     {
-        if(is_string($this->_('value'))):
+        if (is_string($this->_('value'))):
             return $this->_('value');
         endif;
 

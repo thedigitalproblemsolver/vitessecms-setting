@@ -2,15 +2,14 @@
 
 namespace VitesseCms\Setting\Forms;
 
-use VitesseCms\Form\AbstractForm;
 use VitesseCms\Form\AbstractFormWithRepository;
 use VitesseCms\Form\Helpers\ElementHelper;
 use VitesseCms\Form\Interfaces\FormWithRepositoryInterface;
 use VitesseCms\Form\Models\Attributes;
 use VitesseCms\Setting\Enum\TypeEnum;
 use VitesseCms\Setting\Models\Setting;
-use VitesseCms\Setting\SettingInterface;
 use VitesseCms\Setting\Repositories\AdminRepositoryInterface;
+use VitesseCms\Setting\SettingInterface;
 
 class SettingForm extends AbstractFormWithRepository
 {

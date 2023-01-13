@@ -5,7 +5,6 @@ namespace VitesseCms\Setting\Repositories;
 use VitesseCms\Block\Repositories\BlockRepository;
 use VitesseCms\Content\Repositories\ItemRepository;
 use VitesseCms\Datagroup\Repositories\DatagroupRepository;
-use VitesseCms\Language\Repositories\LanguageRepository;
 
 /**
  * @property BlockRepository $block

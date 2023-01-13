@@ -5,7 +5,7 @@ namespace VitesseCms\Setting\Listeners;
 use VitesseCms\Core\Interfaces\InitiateListenersInterface;
 use VitesseCms\Core\Interfaces\InjectableInterface;
 use VitesseCms\Setting\Controllers\AdminsettingController;
-use VitesseCms\Setting\Enums\SettingEnum;
+use VitesseCms\Setting\Enum\SettingEnum;
 use VitesseCms\Setting\Listeners\Admin\AdminMenuListener;
 use VitesseCms\Setting\Listeners\Controllers\AdminsettingControllerListener;
 use VitesseCms\Setting\Repositories\SettingRepository;

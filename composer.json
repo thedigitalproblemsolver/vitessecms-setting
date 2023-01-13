@@ -18,13 +18,13 @@
     }
   },
   "require": {
-    "vitessecms/admin": "~0.2.9",
-    "vitessecms/block": "~0.2.20",
-    "vitessecms/content": "~0.2.21",
+    "vitessecms/admin": "~0.3.0",
+    "vitessecms/block": "~0.3.0",
+    "vitessecms/content": "~0.3.0",
     "vitessecms/core": "~0.2.24",
-    "vitessecms/form": "~0.2.10",
-    "vitessecms/datagroup": "~0.2.11",
-    "vitessecms/language": "~0.2.4",
-    "vitessecms/configuration": "~0.2.2"
+    "vitessecms/form": "~0.3.0",
+    "vitessecms/datagroup": "~0.3.0",
+    "vitessecms/language": "~0.3.0",
+    "vitessecms/configuration": "~0.3.0"
   }
 }

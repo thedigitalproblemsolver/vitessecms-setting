@@ -2,11 +2,10 @@
 
 namespace VitesseCms\Setting\Services;
 
+use VitesseCms\Configuration\Services\ConfigService;
+use VitesseCms\Core\Services\CacheService;
 use VitesseCms\Database\Models\FindValue;
 use VitesseCms\Database\Models\FindValueIterator;
-use VitesseCms\Setting\Models\Setting;
-use VitesseCms\Core\Services\CacheService;
-use VitesseCms\Configuration\Services\ConfigService;
 use VitesseCms\Setting\Factory\SettingFactory;
 use VitesseCms\Setting\Repositories\SettingRepository;
 
@@ -25,8 +24,8 @@ class SettingService
     protected $settingRepository;
 
     public function __construct(
-        CacheService $cache,
-        ConfigService $configuration,
+        CacheService      $cache,
+        ConfigService     $configuration,
         SettingRepository $settingRepository
     )
     {
@@ -59,22 +58,6 @@ class SettingService
         return strtoupper(str_replace([' ', '-'], '_', $setting));
     }
 
-    public function parsePlaceholders(string $content): string
-    {
-        preg_match_all('/{{([A-Z_-]*)}}/', $content, $aMatches);
-        foreach ((array)$aMatches[1] as $key => $value) :
-            if (substr_count($value, '_') === 2) :
-                $content = str_replace(
-                    ['{{{' . $value . '}}}', '{{' . $value . '}}'],
-                    $this->get($value),
-                    $content
-                );
-            endif;
-        endforeach;
-
-        return $content;
-    }
-
     public function get(string $settingKey)
     {
         $settingKey = $this->buildCallingName($settingKey);
@@ -102,6 +85,22 @@ class SettingService
                 $this->cache->save($cacheKey, $content);
             endif;
         endif;
+
+        return $content;
+    }
+
+    public function parsePlaceholders(string $content): string
+    {
+        preg_match_all('/{{([A-Z_-]*)}}/', $content, $aMatches);
+        foreach ((array)$aMatches[1] as $key => $value) :
+            if (substr_count($value, '_') === 2) :
+                $content = str_replace(
+                    ['{{{' . $value . '}}}', '{{' . $value . '}}'],
+                    $this->get($value),
+                    $content
+                );
+            endif;
+        endforeach;
 
         return $content;
     }
