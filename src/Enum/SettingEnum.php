@@ -2,9 +2,8 @@
 
 namespace VitesseCms\Setting\Enum;
 
-use VitesseCms\Core\AbstractEnum;
-
-class SettingEnum extends AbstractEnum
+enum SettingEnum: string
 {
-    public const ATTACH_SERVICE_LISTENER = 'settingService:attach';
+    case SERVICE_LISTENER = 'settingService';
+    case ATTACH_SERVICE_LISTENER = 'settingService:attach';
 }
