@@ -25,6 +25,6 @@
     "vitessecms/form": "~0.4.3",
     "vitessecms/datagroup": "~0.4.1",
     "vitessecms/language": "~0.3.4",
-    "vitessecms/configuration": "~0.4.1"
+    "vitessecms/configuration": "~0.4.2"
   }
 }
