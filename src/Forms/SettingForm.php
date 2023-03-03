@@ -8,30 +8,24 @@ use VitesseCms\Form\Interfaces\FormWithRepositoryInterface;
 use VitesseCms\Form\Models\Attributes;
 use VitesseCms\Setting\Enum\TypeEnum;
 use VitesseCms\Setting\Models\Setting;
-use VitesseCms\Setting\Repositories\AdminRepositoryInterface;
-use VitesseCms\Setting\SettingInterface;
 
 class SettingForm extends AbstractFormWithRepository
 {
     /**
-     * @var AdminRepositoryInterface
-     */
-    public $repositories;
-    /**
      * @var Setting
      */
-    protected $_entity;
+    protected $entity;
 
     public function buildForm(): FormWithRepositoryInterface
     {
-        if ($this->_entity === null) :
-            $this->_entity = new Setting();
+        if ($this->entity === null) :
+            $this->entity = new Setting();
         endif;
 
         $this->addText('%CORE_NAME%', 'name', (new Attributes())->setRequired()->setMultilang());
 
         $readonly = false;
-        if ($this->_entity->getCallingName() !== null) :
+        if ($this->entity->getCallingName() !== null) :
             $readonly = true;
         endif;
 
@@ -40,8 +34,8 @@ class SettingForm extends AbstractFormWithRepository
             'calling_name',
             (new Attributes())->setRequired()->setReadonly($readonly)
         );
-
-        if ($this->_entity->getType() === null) :
+        
+        if ($this->entity->getType() === null) :
             $this->addDropdown(
                 '%ADMIN_TYPE%',
                 'type',
@@ -49,10 +43,10 @@ class SettingForm extends AbstractFormWithRepository
                     ->setOptions(ElementHelper::arrayToSelectOptions(TypeEnum::ALL_TYPES))
             );
         else :
-            $object = $this->_entity->getTypeClass();
+            $object = $this->entity->getTypeClass();
             /** @var SettingInterface $object */
             $object = new $object();
-            $object->buildAdminForm($this, $this->_entity);
+            $object->buildAdminForm($this, $this->entity);
         endif;
 
         $this->addSubmitButton('%CORE_SAVE%');
