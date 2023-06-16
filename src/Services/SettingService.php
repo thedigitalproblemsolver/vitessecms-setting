@@ -58,16 +58,17 @@ class SettingService
         return strtoupper(str_replace([' ', '-'], '_', $setting));
     }
 
-    public function get(string $settingKey)
+    public function get(string $settingKey, bool $showUnPublished = true)
     {
         $settingKey = $this->buildCallingName($settingKey);
         $cacheKey = $this->cache->getCacheKey($settingKey . $this->configuration->getLanguageShort());
         $content = $this->cache->get($cacheKey);
+
         if (!$content) :
             $setting = $this->settingRepository->findFirst(
                 new FindValueIterator([new FindValue('calling_name', $settingKey)])
             );
-            if ($setting === null) :
+            if ($setting === null && $showUnPublished) :
                 $setting = $this->settingRepository->findFirst(
                     new FindValueIterator([new FindValue('calling_name', $settingKey)]),
                     false
@@ -80,7 +81,7 @@ class SettingService
                     $content = $setting->getValueField();
                     $this->cache->save($cacheKey, $content);
                 endif;
-            else :
+            elseif ($setting !== null) :
                 $content = $setting->getValueField();
                 $this->cache->save($cacheKey, $content);
             endif;
@@ -107,11 +108,11 @@ class SettingService
 
     public function getString(string $settingKey): string
     {
-        return (string)$this->get($settingKey);
+        return (string)$this->get($settingKey, false);
     }
 
     public function getBool(string $settingKey): bool
     {
-        return (bool)$this->get($settingKey);
+        return (bool)$this->get($settingKey, false);
     }
 }
