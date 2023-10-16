@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace VitesseCms\Setting\Services;
 
@@ -24,11 +26,10 @@ class SettingService
     protected $settingRepository;
 
     public function __construct(
-        CacheService      $cache,
-        ConfigService     $configuration,
+        CacheService $cache,
+        ConfigService $configuration,
         SettingRepository $settingRepository
-    )
-    {
+    ) {
         $this->cache = $cache;
         $this->configuration = $configuration;
         $this->settingRepository = $settingRepository;
@@ -114,5 +115,19 @@ class SettingService
     public function getBool(string $settingKey): bool
     {
         return (bool)$this->get($settingKey, false);
+    }
+
+    public function getRaw(string $settingKey): array
+    {
+        $setting = $this->settingRepository->findFirst(
+            new FindValueIterator([new FindValue('calling_name', $settingKey)]),
+            false
+        );
+        
+        if ($setting === null) {
+            return [];
+        }
+
+        return $setting->getValues();
     }
 }
