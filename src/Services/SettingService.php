@@ -93,18 +93,29 @@ class SettingService
 
     public function parsePlaceholders(string $content): string
     {
-        preg_match_all('/{{([A-Z_-]*)}}/', $content, $aMatches);
-        foreach ((array)$aMatches[1] as $key => $value) :
-            if (substr_count($value, '_') === 2) :
-                $content = str_replace(
-                    ['{{{' . $value . '}}}', '{{' . $value . '}}'],
-                    $this->get($value),
-                    $content
-                );
-            endif;
-        endforeach;
+        foreach ($this->getSettingsFromString($content) as $key => $value) {
+            $content = str_replace(
+                ['{{{' . $value . '}}}', '{{' . $value . '}}'],
+                $this->get($value),
+                $content
+            );
+        }
 
         return $content;
+    }
+
+    public function getSettingsFromString(string $string): array
+    {
+        $return = [];
+
+        preg_match_all('/{{([A-Z_-]*)}}/', $string, $aMatches);
+        foreach ($aMatches[1] as $key => $value) {
+            if (substr_count($value, '_') === 2) {
+                $return[] = $value;
+            }
+        }
+
+        return $return;
     }
 
     public function getString(string $settingKey): string
@@ -123,7 +134,7 @@ class SettingService
             new FindValueIterator([new FindValue('calling_name', $settingKey)]),
             false
         );
-        
+
         if ($setting === null) {
             return [];
         }
