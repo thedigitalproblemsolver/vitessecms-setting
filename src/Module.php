@@ -1,12 +1,15 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace VitesseCms\Setting;
 
+use Phalcon\Di\DiInterface;
 use VitesseCms\Admin\Utils\AdminUtil;
+use VitesseCms\Block\Models\Block;
 use VitesseCms\Block\Repositories\BlockRepository;
 use VitesseCms\Content\Repositories\ItemRepository;
 use VitesseCms\Core\AbstractModule;
-use Phalcon\Di\DiInterface;
 use VitesseCms\Datagroup\Repositories\DatagroupRepository;
 use VitesseCms\Setting\Repositories\AdminRepositoryCollection;
 
@@ -17,11 +20,14 @@ class Module extends AbstractModule
         parent::registerServices($di, 'Setting');
 
         if (AdminUtil::isAdminPage()) :
-            $di->setShared('repositories', new AdminRepositoryCollection(
-                new BlockRepository(),
-                new DatagroupRepository(),
-                new ItemRepository()
-            ));
+            $di->setShared(
+                'repositories',
+                new AdminRepositoryCollection(
+                    new BlockRepository(Block::class),
+                    new DatagroupRepository(),
+                    new ItemRepository()
+                )
+            );
         endif;
     }
 }
