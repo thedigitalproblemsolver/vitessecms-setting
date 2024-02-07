@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace VitesseCms\Setting\Listeners;
 
@@ -10,15 +11,18 @@ use VitesseCms\Setting\Repositories\SettingRepository;
 
 class InitiateListeners implements InitiateListenersInterface
 {
-    public static function setListeners(InjectableInterface $di): void
+    public static function setListeners(InjectableInterface $injectable): void
     {
-        if ($di->user->hasAdminAccess()):
-            $di->eventsManager->attach('adminMenu', new AdminMenuListener());
+        if ($injectable->user->hasAdminAccess()):
+            $injectable->eventsManager->attach('adminMenu', new AdminMenuListener());
         endif;
-        $di->eventsManager->attach(SettingEnum::SERVICE_LISTENER->value, new ServiceListener(
-            $di->cache,
-            $di->configuration,
-            new SettingRepository()
-        ));
+        $injectable->eventsManager->attach(
+            SettingEnum::SERVICE_LISTENER->value,
+            new ServiceListener(
+                $injectable->cache,
+                $injectable->configuration,
+                new SettingRepository()
+            )
+        );
     }
 }
