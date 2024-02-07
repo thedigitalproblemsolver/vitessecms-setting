@@ -8,10 +8,10 @@ use VitesseCms\Form\Models\Attributes;
 use VitesseCms\Setting\Forms\SettingForm;
 use VitesseCms\Setting\SettingInterface;
 
-class SettingTextEditor implements SettingInterface
+class SettingTextArea implements SettingInterface
 {
     public function buildAdminForm(SettingForm $form): void
     {
-        $form->addEditor('%CORE_VALUE%', 'value', (new Attributes())->setRequired()->setMultilang());
+        $form->addTextarea('%ADMIN_VALUE%', 'value', (new Attributes())->setRequired()->setMultilang());
     }
 }
