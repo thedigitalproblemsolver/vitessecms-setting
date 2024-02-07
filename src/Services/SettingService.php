@@ -13,43 +13,30 @@ use VitesseCms\Setting\Repositories\SettingRepository;
 
 class SettingService
 {
-    /**
-     * @var CacheService
-     */
-    protected $cache;
-
-    /**
-     * @var ConfigService
-     */
-    protected $configuration;
-
-    protected $settingRepository;
-
     public function __construct(
-        CacheService $cache,
-        ConfigService $configuration,
-        SettingRepository $settingRepository
+        private readonly CacheService $cache,
+        private readonly ConfigService $configuration,
+        private readonly SettingRepository $settingRepository
     ) {
-        $this->cache = $cache;
-        $this->configuration = $configuration;
-        $this->settingRepository = $settingRepository;
     }
 
-    public function has(string $setting, $hideUnpublished = true): bool
+    public function has(string $settingKey, bool $hideUnpublished = true): bool
     {
-        $setting = $this->buildCallingName($setting);
-        $content = $this->cache->get($this->cache->getCacheKey($setting));
-        if ($content !== null) :
+        $settingKey = $this->buildCallingName($settingKey);
+
+        $content = $this->cache->get($this->cache->getCacheKey($settingKey));
+        if (null !== $content) {
             return true;
-        endif;
+        }
 
         $setting = $this->settingRepository->findFirst(
-            new FindValueIterator([new FindValue('calling_name', $setting)]),
+            new FindValueIterator([new FindValue('calling_name', $settingKey)]),
             $hideUnpublished
         );
-        if ($setting !== null) :
+
+        if (null !== $setting) {
             return true;
-        endif;
+        }
 
         return false;
     }
@@ -62,40 +49,54 @@ class SettingService
     public function get(string $settingKey, bool $showUnPublished = true)
     {
         $settingKey = $this->buildCallingName($settingKey);
-        $cacheKey = $this->cache->getCacheKey($settingKey . $this->configuration->getLanguageShort());
+        $cacheKey = $this->cache->getCacheKey($settingKey.$this->configuration->getLanguageShort());
         $content = $this->cache->get($cacheKey);
 
-        if (!$content) :
+        if (!$content) {
             $setting = $this->settingRepository->findFirst(
                 new FindValueIterator([new FindValue('calling_name', $settingKey)])
             );
-            if ($setting === null && $showUnPublished) :
+            if (null === $setting && $showUnPublished) {
                 $setting = $this->settingRepository->findFirst(
                     new FindValueIterator([new FindValue('calling_name', $settingKey)]),
                     false
                 );
-                if ($setting === null) :
+                if (null === $setting) {
                     SettingFactory::create($settingKey)->save();
 
                     return '';
-                else :
+                } else {
                     $content = $setting->getValueField();
                     $this->cache->save($cacheKey, $content);
-                endif;
-            elseif ($setting !== null) :
+                }
+            } elseif (null !== $setting) {
                 $content = $setting->getValueField();
                 $this->cache->save($cacheKey, $content);
-            endif;
-        endif;
+            }
+        }
 
         return $content;
+    }
+
+    public function getRaw(string $settingKey): array
+    {
+        $setting = $this->settingRepository->findFirst(
+            new FindValueIterator([new FindValue('calling_name', $settingKey)]),
+            false
+        );
+
+        if (null === $setting) {
+            return [];
+        }
+
+        return $setting->getValues();
     }
 
     public function parsePlaceholders(string $content): string
     {
         foreach ($this->getSettingsFromString($content) as $key => $value) {
             $content = str_replace(
-                ['{{{' . $value . '}}}', '{{' . $value . '}}'],
+                ['{{{'.$value.'}}}', '{{'.$value.'}}'],
                 $this->get($value),
                 $content
             );
@@ -110,7 +111,7 @@ class SettingService
 
         preg_match_all('/{{([A-Z_-]*)}}/', $string, $aMatches);
         foreach ($aMatches[1] as $key => $value) {
-            if (substr_count($value, '_') === 2) {
+            if (2 === substr_count($value, '_')) {
                 $return[] = $value;
             }
         }
@@ -120,25 +121,11 @@ class SettingService
 
     public function getString(string $settingKey): string
     {
-        return (string)$this->get($settingKey, false);
+        return (string) $this->get($settingKey, false);
     }
 
     public function getBool(string $settingKey): bool
     {
-        return (bool)$this->get($settingKey, false);
-    }
-
-    public function getRaw(string $settingKey): array
-    {
-        $setting = $this->settingRepository->findFirst(
-            new FindValueIterator([new FindValue('calling_name', $settingKey)]),
-            false
-        );
-
-        if ($setting === null) {
-            return [];
-        }
-
-        return $setting->getValues();
+        return (bool) $this->get($settingKey, false);
     }
 }

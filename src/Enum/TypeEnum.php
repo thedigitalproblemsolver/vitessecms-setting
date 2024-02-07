@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace VitesseCms\Setting\Enum;
 
@@ -12,6 +14,7 @@ class TypeEnum extends AbstractEnum
     public const IMAGE = 'SettingImage';
     public const ITEM = 'SettingItem';
     public const TEXT = 'SettingText';
+    public const TEXTAREA = 'SettingTextArea';
     public const TEXT_EDITOR = 'SettingTextEditor';
 
     public const ALL_TYPES = [
@@ -21,6 +24,7 @@ class TypeEnum extends AbstractEnum
         self::IMAGE => 'Image',
         self::ITEM => 'Item',
         self::TEXT => 'Text',
+        self::TEXTAREA => 'Textarea',
         self::TEXT_EDITOR => 'Text editor',
     ];
 }
